@@ -34,3 +34,19 @@ export default async function handler(
     res.status(500).json({ error: true, message: error });
   }
 }
+
+export async function getText(prompt: string, temperature: number) {
+  try {
+    const response = await gpt3.createCompletion({
+      model: "text-davinci-003",
+      prompt: prompt,
+      temperature: temperature,
+      max_tokens: 400,
+    });
+    const text = response.data.choices[0].text;
+
+     return { success: true, text: text };
+  } catch (error) {
+    return { error: true, message: error };
+  }
+}
