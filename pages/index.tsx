@@ -1,39 +1,77 @@
 // @ts-ignore
 import type { NextPage } from "next";
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
-import { useEffect, useState } from "react";
-import { MapsArrowDiagonal } from "iconoir-react";
+import { useEffect, useRef, useState } from "react";
+import {
+  FastArrowLeft,
+  FastArrowLeftBox,
+  FastArrowRight,
+  MapsArrowDiagonal,
+} from "iconoir-react";
+
 import { motion, AnimatePresence } from "framer-motion";
-
-var myHeaders = new Headers();
-myHeaders.append("Content-Type", "application/json");
-
-async function setText(
-  prompt: string,
-  temperature: number,
-  setPickUp: Function
-) {
-  var raw = JSON.stringify({
-    prompt: prompt,
-    temperature: temperature,
-  });
-
-  fetch("/api/pickup", {
-    method: "POST",
-    headers: myHeaders,
-    body: raw,
-    redirect: "follow",
-  })
-    .then((res) => res.json())
-    .then((res) => setPickUp(res.text));
-}
+import { relationshipAdvice } from "./data";
 
 const Home: NextPage = () => {
-  let [pickUp, setPickUp] = useState("");
+  const [openPopup, setOpenPopup] = useState(false);
+  const [advice, setAdvice] = useState("");
+  const [input, setInput] = useState("");
+  const [popupContent, setPopupContent] = useState({
+    title: "Enter your",
+    annotatedText: "location",
+    placeholder: "eg: Delhi, Kerala",
+    promptStart: "Write 5 ",
+    promptEnd: " themed hardcore pick-up lines",
+  });
+  const { title, annotatedText, placeholder, promptStart, promptEnd } =
+    popupContent;
+  const [pickupLine, setPickupLine] = useState("");
 
-  useEffect(() => {
-    setText("write a pickup line relating to delhi", 0.7, setPickUp);
-  }, []);
+  function getRandomAdvice(adviceArray) {
+    const index = Math.floor(Math.random() * adviceArray.length);
+    return adviceArray[index];
+  }
+
+  async function getPickupLine(prompt: string) {
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        prompt: prompt,
+        temperature: 0.7,
+      });
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      const response = await fetch(
+        "http://localhost:3000/api/pickup",
+        requestOptions as any
+      );
+      const result = await response.json();
+      setPickupLine(result.text);
+      setAdvice(getRandomAdvice(relationshipAdvice));
+      setInput("");
+    } catch (error) {
+      console.log("error", error);
+      return error;
+    }
+  }
+
+  const popupRef = useRef(null);
+
+  const handleClick = (event: any) => {
+    if (!popupRef.current.contains(event.target)) {
+      // clicked outside the popup, so close it
+      setOpenPopup(false);
+      setPickupLine("");
+    }
+  };
 
   const data = [
     {
@@ -43,6 +81,13 @@ const Home: NextPage = () => {
       description:
         "Are you from Delhi? Because you have me feeling like I'm in the heart of India, surrounded by beauty and culture.",
       accentColor: "green",
+      popupContent: {
+        title: "Enter the",
+        annotatedText: "location",
+        placeholder: "eg: Delhi, Singapore",
+        promptStart: "Write 5 ",
+        promptEnd: " themed hardcore pick-up lines",
+      },
     },
     {
       title: "Food",
@@ -51,6 +96,13 @@ const Home: NextPage = () => {
       description:
         "Are you a pepperoni pizza? Because you've got me feeling hot and spicy, and I can't resist a slice of you.",
       accentColor: "yellow",
+      popupContent: {
+        title: "Enter your",
+        annotatedText: "fav fooood",
+        placeholder: "eg: Pepperoni pizza, Double cheeseburger",
+        promptStart: "Write 5 pick-up lines that are related to ",
+        promptEnd: " for me to use",
+      },
     },
     {
       title: "Drinks",
@@ -59,6 +111,13 @@ const Home: NextPage = () => {
       description:
         "Are you a can of Pepsi? Because you have me feeling refreshed and ready for anything.",
       accentColor: "red",
+      popupContent: {
+        title: "Enter your",
+        annotatedText: "fav drink",
+        placeholder: "eg: Coca Cola, Pepsi",
+        promptStart: "Write 5 ",
+        promptEnd: " themed hardcore pick-up lines",
+      },
     },
     {
       title: "Celebrity",
@@ -67,38 +126,81 @@ const Home: NextPage = () => {
       description:
         "Baby, let's play football together and both of us can be Messi together.",
       accentColor: "blue",
+      popupContent: {
+        title: "Enter your",
+        annotatedText: "celebrity crush",
+        placeholder: "eg: Lionel Messi, Tom Cruise",
+        promptStart: "Write 5 hardcore pick-up lines relating to",
+        promptEnd: "",
+      },
     },
   ];
+
+  const onSubmit = async (event: any) => {
+    event.preventDefault();
+
+    getPickupLine(promptStart + input + promptEnd);
+  };
+
+  useEffect(() => {
+    if (document.querySelector(".pickup-line-container")) {
+      const list = document.createElement("ol");
+
+      const items = pickupLine.split("\n");
+
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.innerHTML = item;
+        list.appendChild(li);
+      });
+
+      document.querySelector(".pickup-line-container").appendChild(list);
+    }
+  }, [pickupLine]);
+
   return (
-    <div className="bg-[#330b34] h-screen w-screen">
-      <div className="flex flex-col items-center justify-center py-24">
+    <div className="bg-[#330b34] w-screen">
+      <div className="flex flex-col items-center justify-center px-5 py-24">
         <div className="">
-          <h1 className="mb-6 text-5xl font-bold text-white">Pickup Lines</h1>
+          <h1 className="leading-[140%] mb-6 text-5xl font-bold text-white">
+            Generate Pickup Lines to up your{" "}
+            <RoughNotation
+              type="underline"
+              show={true}
+              color="#d370c4"
+              strokeWidth={2}
+            >
+              Flirting Game
+            </RoughNotation>{" "}
+          </h1>
           <span className="text-2xl italic font-semibold text-[#a0a1a9]">
             — (Use at your own risk)
           </span>
         </div>
       </div>
-      <div className="w-full h-full bg-[#eee] shadow-cont rounded-[50px] p-20">
-        <p className="mb-12 text-gray-500 leading-[170%] text-lg">
+      <div className="w-full h-full bg-[#eee] shadow-cont rounded-t-[50px] px-5 lg:px-20 py-20">
+        <p className="text-gray-500 leading-[170%] text-lg">
           Looking for the perfect way to sweep your partner off their feet? Look
           no further! We've got a range of options that are sure to make their
           heart skip a beat. And the best part? These pickup lines are so
           clever, they'll blow your mind! Trust us, you won't be disappointed.
-          {pickUp}
         </p>
-        <div className="flex w-full">
+        <div className="w-full lg:flex mb-9">
           {data.map((item, index) => {
             const [grpHover, setGrpHover] = useState(false);
 
             return (
               <motion.div
-                className={`bg-white border border-transparent rounded-2xl transition duration-500 w-[350px] h-[420px] border-${item.accentColor} group parent cursor-pointer m-3`}
+                className={`bg-white border border-transparent rounded-2xl transition duration-500 w-[350px] my-12 h-[420px] border-${item.accentColor} group parent cursor-pointer m-3`}
                 key={index}
                 whileTap={{ scale: 0.8 }}
                 whileHover={{ scale: 1.0 }}
                 onHoverStart={() => setGrpHover(true)}
                 onHoverEnd={() => setGrpHover(false)}
+                onClick={() => {
+                  setPopupContent(item.popupContent);
+                  setOpenPopup(true);
+                }}
               >
                 <div className="relative overflow-hidden rounded-2xl">
                   <img src={item.imageURL} className=" w-full h-[200px]" />
@@ -139,6 +241,83 @@ const Home: NextPage = () => {
           })}
         </div>
       </div>
+      <AnimatePresence>
+        {openPopup && (
+          <motion.div
+            className="top-0 left-0 h-full z-[9999] w-full fixed flex items-center justify-center glassmorphism popup-container"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={handleClick}
+          >
+            <motion.div
+              className="lg:p-12 p-8 bg-white rounded-2xl w-[700px] shadow-2xl popup relative"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.2 }}
+              ref={popupRef}
+            >
+              <AnimatePresence>
+                {pickupLine ? (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="pickup-line-container">{}</div>
+                    <p className="text-[#d370c4] font-[600]">
+                      <span className="font-light text-[13px]">
+                        PS. All the best. Here is a free relationship advice:
+                      </span>{" "}
+                      <br />
+                      <span className="mt-2">{advice}</span>
+                    </p>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <h3 className="mb-6 text-3xl font-semibold">
+                      {title}{" "}
+                      <RoughNotation
+                        type="underline"
+                        show={true}
+                        color="#d370c4"
+                        strokeWidth={2}
+                      >
+                        {annotatedText}
+                      </RoughNotation>
+                      ?
+                    </h3>
+                    <form onSubmit={onSubmit}>
+                      <input
+                        type="text"
+                        placeholder={placeholder}
+                        className="w-full px-3 py-2 mb-6 text-lg bg-gray-100 rounded-xl placeholder:italic"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                      />
+                      <button
+                        type="submit"
+                        className="bg-[#330b34] hover:bg-[#d370c4] transition duration-500 cursor-pointer px-7 rounded-full py-3 text-white w-fit flex items-center justify-center"
+                      >
+                        Generate{" "}
+                        <FastArrowRight fontSize={14} className="ml-1" />
+                      </button>
+                    </form>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
