@@ -6,3 +6,49 @@
 .shadow-cont {
   box-shadow: 0px 0px 80px #d370c460;
 }
+.border-green {
+  box-shadow: 0px 0px 40px #5eda5e10;
+}
+.border-green:hover {
+  border-color: #5eda5e50;
+  box-shadow: 0px 0px 40px #5eda5e30;
+}
+.bg-clickBtn-green {
+  background: #5eda5e50;
+}
+.glassmorphism {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+.border-yellow:hover {
+  border-color: #dada5e50;
+  box-shadow: 0px 0px 40px #dada5e50;
+}
+.bg-clickBtn-yellow {
+  background: #dada5e50;
+}
+
+.border-red:hover {
+  border-color: #df3f3f25;
+  box-shadow: 0px 0px 40px #df3f3f25;
+}
+.bg-clickBtn-red {
+  background: #df3f3f25;
+}
+
+.border-blue:hover {
+  border-color: #3faadf40;
+  box-shadow: 0px 0px 40px #3faadf40;
+}
+.bg-clickBtn-blue {
+  background: #3faadf40;
+}
+.parent-div {
+  /* other styles */
+  width: 58px;
+  transition: width 0.3s ease-in-out;
+}
+
+.parent:hover .parent-div {
+  width: 120px; /* or any other width value */
+}
