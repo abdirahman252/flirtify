@@ -2,12 +2,7 @@
 import type { NextPage } from "next";
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 import { useEffect, useRef, useState } from "react";
-import {
-  FastArrowLeft,
-  FastArrowLeftBox,
-  FastArrowRight,
-  MapsArrowDiagonal,
-} from "iconoir-react";
+import { FastArrowRight, MapsArrowDiagonal } from "iconoir-react";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { relationshipAdvice } from "./data";
@@ -16,6 +11,7 @@ const Home: NextPage = () => {
   const [openPopup, setOpenPopup] = useState(false);
   const [advice, setAdvice] = useState("");
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
   const [popupContent, setPopupContent] = useState({
     title: "Enter your",
     annotatedText: "location",
@@ -26,6 +22,18 @@ const Home: NextPage = () => {
   const { title, annotatedText, placeholder, promptStart, promptEnd } =
     popupContent;
   const [pickupLine, setPickupLine] = useState("");
+  const [dots, setDots] = useState("");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (dots.length < 3) {
+        setDots(dots + ".");
+      } else {
+        setDots("");
+      }
+    }, 500);
+    return () => clearInterval(interval);
+  }, [dots]);
 
   function getRandomAdvice(adviceArray) {
     const index = Math.floor(Math.random() * adviceArray.length);
@@ -55,8 +63,8 @@ const Home: NextPage = () => {
       );
       const result = await response.json();
       setPickupLine(result.text);
+      setLoading(false);
       setAdvice(getRandomAdvice(relationshipAdvice));
-      setInput("");
     } catch (error) {
       console.log("error", error);
       return error;
@@ -139,6 +147,7 @@ const Home: NextPage = () => {
   const onSubmit = async (event: any) => {
     event.preventDefault();
 
+    setLoading(true);
     getPickupLine(promptStart + input + promptEnd);
   };
 
@@ -147,6 +156,10 @@ const Home: NextPage = () => {
       const list = document.createElement("ol");
 
       const items = pickupLine.split("\n");
+
+      if (list.children.length >= 5) {
+        return;
+      }
 
       items.forEach((item) => {
         const li = document.createElement("li");
@@ -198,6 +211,7 @@ const Home: NextPage = () => {
                 onHoverStart={() => setGrpHover(true)}
                 onHoverEnd={() => setGrpHover(false)}
                 onClick={() => {
+                  setInput("");
                   setPopupContent(item.popupContent);
                   setOpenPopup(true);
                 }}
@@ -267,10 +281,10 @@ const Home: NextPage = () => {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="pickup-line-container">{}</div>
-                    <p className="text-[#d370c4] font-[600]">
+                    <div className="pickup-line-container"></div>
+                    <p className="mt-4 text-[#d370c4] font-[600]">
                       <span className="font-light text-[13px]">
-                        PS. All the best. Here is a free relationship advice:
+                        PS. Here is a free relationship advice:
                       </span>{" "}
                       <br />
                       <span className="mt-2">{advice}</span>
@@ -295,7 +309,7 @@ const Home: NextPage = () => {
                       </RoughNotation>
                       ?
                     </h3>
-                    <form onSubmit={onSubmit}>
+                    <form onSubmit={onSubmit} className="mb-2">
                       <input
                         type="text"
                         placeholder={placeholder}
@@ -306,11 +320,17 @@ const Home: NextPage = () => {
                       <button
                         type="submit"
                         className="bg-[#330b34] hover:bg-[#d370c4] transition duration-500 cursor-pointer px-7 rounded-full py-3 text-white w-fit flex items-center justify-center"
+                        style={{ pointerEvents: loading && "none" }}
                       >
                         Generate{" "}
                         <FastArrowRight fontSize={14} className="ml-1" />
                       </button>
                     </form>
+                    {loading && (
+                      <span className="text-[#d370c4]">
+                        Helping you connect with your ex{dots}
+                      </span>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
