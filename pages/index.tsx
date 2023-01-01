@@ -5,7 +5,34 @@ import { useEffect, useRef, useState } from "react";
 import { FastArrowRight, MapsArrowDiagonal } from "iconoir-react";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { relationshipAdvice } from "./data";
+
+const relationshipAdvice = [
+  "Communication is key.",
+  "Trust is essential.",
+  "Respect is fundamental.",
+  "Make time for each other.",
+  "Include your partner in your interests and hobbies.",
+  "Express appreciation and gratitude.",
+  "Don't be afraid to ask for help or support.",
+  "Keep the romance alive.",
+  "Learn to resolve conflicts in a healthy way.",
+  "Seek help from a therapist or counselor if needed.",
+  "Practice forgiveness.",
+  "Compromise and be open to your partner's perspective.",
+  "Show love and affection regularly.",
+  "Discuss your needs and boundaries.",
+  "Keep the lines of communication open.",
+  "Practice honesty and transparency.",
+  "Don't let resentment or negative emotions build up.",
+  "Be patient and understanding.",
+  "Practice gratitude and focus on the positive.",
+  "Keep the spark alive.",
+  "Don't take your partner for granted.",
+  "Don't let outside influences come between you.",
+  "Practice forgiveness and let go of grudges.",
+  "Support and encourage your partner's goals and dreams.",
+  "Regularly express your love and affection.",
+];
 
 const Home: NextPage = () => {
   const [openPopup, setOpenPopup] = useState(false);
