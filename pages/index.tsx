@@ -84,10 +84,7 @@ const Home: NextPage = () => {
         redirect: "follow",
       };
 
-      const response = await fetch(
-        "http://localhost:3000/api/pickup",
-        requestOptions as any
-      );
+      const response = await fetch("/api/pickup", requestOptions as any);
       const result = await response.json();
       setPickupLine(result.text);
       setLoading(false);
@@ -219,7 +216,7 @@ const Home: NextPage = () => {
         </div>
       </div>
       <div className="w-full h-full bg-[#eee] shadow-cont rounded-t-[50px] px-5 lg:px-20 py-20">
-        <p className="text-gray-500 leading-[170%] text-lg">
+        <p className="text-gray-500 leading-[170%] text-lg mb-14">
           Looking for the perfect way to sweep your partner off their feet? Look
           no further! We've got a range of options that are sure to make their
           heart skip a beat. And the best part? These pickup lines are so
@@ -231,7 +228,7 @@ const Home: NextPage = () => {
 
             return (
               <motion.div
-                className={`bg-white border border-transparent rounded-2xl transition duration-500 w-[350px] my-12 h-[420px] border-${item.accentColor} group parent cursor-pointer m-3`}
+                className={`bg-white border border-transparent rounded-2xl transition duration-500 w-full lg:w-[350px] my-12 h-[420px] border-${item.accentColor} group parent cursor-pointer lg:m-3`}
                 key={index}
                 whileTap={{ scale: 0.8 }}
                 whileHover={{ scale: 1.0 }}
