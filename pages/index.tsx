@@ -35,7 +35,7 @@ const Home: NextPage = () => {
     return () => clearInterval(interval);
   }, [dots]);
 
-  function getRandomAdvice(adviceArray) {
+  function getRandomAdvice(adviceArray: any) {
     const index = Math.floor(Math.random() * adviceArray.length);
     return adviceArray[index];
   }
@@ -71,7 +71,7 @@ const Home: NextPage = () => {
     }
   }
 
-  const popupRef = useRef(null);
+  const popupRef: any = useRef(null);
 
   const handleClick = (event: any) => {
     if (!popupRef.current.contains(event.target)) {
@@ -167,7 +167,7 @@ const Home: NextPage = () => {
         list.appendChild(li);
       });
 
-      document.querySelector(".pickup-line-container").appendChild(list);
+      document.querySelector(".pickup-line-container")?.appendChild(list);
     }
   }, [pickupLine]);
 
@@ -320,7 +320,7 @@ const Home: NextPage = () => {
                       <button
                         type="submit"
                         className="bg-[#330b34] hover:bg-[#d370c4] transition duration-500 cursor-pointer px-7 rounded-full py-3 text-white w-fit flex items-center justify-center"
-                        style={{ pointerEvents: loading && "none" }}
+                        style={{ pointerEvents: loading ? "none" : "auto" }}
                       >
                         Generate{" "}
                         <FastArrowRight fontSize={14} className="ml-1" />

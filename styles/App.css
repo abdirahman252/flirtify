@@ -73,8 +73,6 @@ ol li {
   animation: fade-in 1s forwards 1s;
 }
 
-// And so on for as many list items as you have...
-
 @keyframes fade-in {
   from {
     opacity: 0;
