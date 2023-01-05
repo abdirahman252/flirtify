@@ -220,10 +220,8 @@ const Home: NextPage = () => {
       </div>
       <div className="w-full h-full bg-[#eee] shadow-cont rounded-t-[50px] px-5 lg:px-20 py-20">
         <p className="text-gray-500 leading-[170%] text-lg mb-14">
-          Looking for the perfect way to sweep your partner off their feet? Look
-          no further! We've got a range of options that are sure to make their
-          heart skip a beat. And the best part? These pickup lines are so
-          clever, they'll blow your mind! Trust us, you won't be disappointed.
+          Need a cute and funny way to sweep your partner off their feet? Try
+          these clever AI generated pickup lines!
         </p>
         <div className="w-full lg:flex mb-9">
           {data.map((item, index) => {
