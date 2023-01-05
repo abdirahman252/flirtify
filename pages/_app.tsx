@@ -17,6 +17,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           name="description"
           content="AI-generated pickup lines for the modern romantic"
         />
+        <link rel="icon" href="https://flirtify.vercel.app/icon.png"></link>
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://flirtify.vercel.app/" />
