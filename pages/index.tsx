@@ -202,18 +202,19 @@ const Home: NextPage = () => {
       <div className="flex flex-col items-center justify-center px-5 py-24">
         <div className="">
           <h1 className="leading-[140%] mb-6 text-5xl font-bold text-white">
-            Generate Pickup Lines to up your{" "}
+            Upgrade your{" "}
             <RoughNotation
               type="underline"
               show={true}
               color="#d370c4"
               strokeWidth={2}
             >
-              Flirting Game
+              flirting game
             </RoughNotation>{" "}
+            with a little help from AI
           </h1>
-          <span className="text-2xl italic font-semibold text-[#a0a1a9]">
-            — (Use at your own risk)
+          <span className="text-2xl italic text-gray-400">
+            AI-generated pickup lines for the modern romantic 💃
           </span>
         </div>
       </div>
