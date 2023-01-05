@@ -114,11 +114,12 @@ const Home: NextPage = () => {
         "Are you from Delhi? Because you have me feeling like I'm in the heart of India, surrounded by beauty and culture.",
       accentColor: "green",
       popupContent: {
-        title: "Enter the",
+        title: "Enter any",
         annotatedText: "location",
         placeholder: "eg: Delhi, Singapore",
         promptStart: "Write 5 ",
-        promptEnd: " themed hardcore pick-up lines",
+        promptEnd:
+          " themed hardcore pick-up lines that're very funny and impressive",
       },
     },
     {
@@ -132,8 +133,9 @@ const Home: NextPage = () => {
         title: "Enter your",
         annotatedText: "fav fooood",
         placeholder: "eg: Pepperoni pizza, Double cheeseburger",
-        promptStart: "Write 5 pick-up lines that are related to ",
-        promptEnd: " for me to use",
+        promptStart:
+          "Generate 5 very funny, catchy hardcore pickup line relating to ",
+        promptEnd: "",
       },
     },
     {
@@ -147,8 +149,8 @@ const Home: NextPage = () => {
         title: "Enter your",
         annotatedText: "fav drink",
         placeholder: "eg: Coca Cola, Pepsi",
-        promptStart: "Write 5 ",
-        promptEnd: " themed hardcore pick-up lines",
+        promptStart: "Generate 5 hardcore pickup line relating to",
+        promptEnd: "",
       },
     },
     {
@@ -159,10 +161,10 @@ const Home: NextPage = () => {
         "Baby, let's play football together and both of us can be Messi together.",
       accentColor: "blue",
       popupContent: {
-        title: "Enter your",
-        annotatedText: "celebrity crush",
+        title: "Who is your",
+        annotatedText: "fav celebrity",
         placeholder: "eg: Lionel Messi, Tom Cruise",
-        promptStart: "Write 5 hardcore pick-up lines relating to",
+        promptStart: "Write 5 hardcore pick-up lines relating to ",
         promptEnd: "",
       },
     },
@@ -278,6 +280,19 @@ const Home: NextPage = () => {
             );
           })}
         </div>
+        <div className="flex items-center justify-center w-full text-gray-500">
+          <p>
+            Built with ❤️ by{" "}
+            <a
+              href="https://twitter.com/saviomartin7"
+              target="_blank"
+              className="text-gray-600 font-[500] hover:text-pink-400 transition duration-300"
+            >
+              Savio
+            </a>
+            , (on hunt for a soulmate lol)
+          </p>
+        </div>
       </div>
       <AnimatePresence>
         {openPopup && (
@@ -290,7 +305,7 @@ const Home: NextPage = () => {
             onClick={handleClick}
           >
             <motion.div
-              className="lg:p-12 p-8 bg-white rounded-2xl w-[700px] shadow-2xl popup relative"
+              className="lg:p-12 p-8 bg-white rounded-2xl w-[700px] shadow-[#330b34]/40 shadow-2xl popup relative"
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.98 }}
@@ -305,14 +320,40 @@ const Home: NextPage = () => {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="pickup-line-container"></div>
-                    <p className="mt-4 text-[#d370c4] font-[600]">
+                    <div className="text-xl text-gray-600 pickup-line-container"></div>
+                    <div className="border my-5 border-[#191919]/10 border-b-transparent border-dotted border-x-transparent"></div>
+                    <p className="text-gray-500 font-[500]">
                       <span className="font-light text-[13px]">
                         PS. Here is a free relationship advice:
                       </span>{" "}
                       <br />
                       <span className="mt-2">{advice}</span>
                     </p>
+                    <div className="border my-5 border-[#191919]/10 border-b-transparent border-dotted border-x-transparent"></div>
+                    <a
+                      className="bg-[#d370c4] mb-2 inline-block text-white w-fit px-8 py-2 rounded-lg hover:shadow-xl hover:shadow-[#d370c4]/20 transition duration-500"
+                      href="https://www.buymeacoffee.com/saviomartin"
+                      target="_blank"
+                    >
+                      Buy me a coffee? ❤️
+                    </a>
+                    <br />
+                    <span className="font-[400] text-[#d370c4]">
+                      Help us keep the romance alive with a{" "}
+                      <a
+                        href="https://www.buymeacoffee.com/saviomartin"
+                        target="_blank"
+                      >
+                        <RoughNotation
+                          type="underline"
+                          show={true}
+                          color="#d370c4"
+                          strokeWidth={2}
+                        >
+                          small donation
+                        </RoughNotation>
+                      </a>
+                    </span>
                   </motion.div>
                 ) : (
                   <motion.div
@@ -351,9 +392,16 @@ const Home: NextPage = () => {
                       </button>
                     </form>
                     {loading && (
-                      <span className="text-[#d370c4]">
-                        Helping you connect with your ex{dots}
-                      </span>
+                      <motion.span
+                        className="text-[#d370c4]"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        Our AI is busy making love connections, hang tight{" "}
+                        {dots}
+                      </motion.span>
                     )}
                   </motion.div>
                 )}
